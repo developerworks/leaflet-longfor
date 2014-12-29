@@ -1,0 +1,133 @@
+<html>
+<head>
+  <title>Leaflet OSM 3D建筑</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+  <link rel="stylesheet" href="../bower_components/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="../bower_components/Leaflet.draw/dist/leaflet.draw.css"/>
+  <script type="text/javascript" src="../bower_components/leaflet/dist/leaflet-src.js"></script>
+  <script type="text/javascript" src="../bower_components/osmbuildings/dist/OSMBuildings-Leaflet.js"></script>
+  <script type="text/javascript" src="../bower_components/Leaflet.draw/dist/leaflet.draw-src.js"></script>
+  <script type="text/javascript" src="../locales/zh_cn.js"></script>
+</head>
+<body>
+<div style="width:800px;height:500px;" id="map"></div>
+<script type="text/javascript" src="longfor.js"></script>
+<script type='text/javascript'>
+  var display = {
+    osm_buildings: true,
+    geojson_layer: false
+  };
+
+  // ========
+  // 初始化Map
+  // ========
+  var map = new L.map('map');
+  // 北城天街
+  map.setView([29.58103, 106.53065], 17);
+
+  // 瓦片模板
+  new L.TileLayer(
+    'http://{s}.tiles.mapbox.com/v3/osmbuildings.kbpalbpk/{z}/{x}/{y}.png',
+    { attribution: 'Map tiles &copy; <a href="http://mapbox.com">MapBox</a>', maxNativeZoom: 19, maxZoom: 21 }
+  ).addTo(map);
+
+  // ==========
+  // GeoJSON层
+  // ==========
+  if (display.geojson_layer) {
+    var geojsonLayer = L.geoJson([longforGeojsonFeature], {
+      style: function (feature) {
+        return feature.properties && feature.properties.style;
+      },
+      onEachFeature: function (feature, layer) {
+        console.log(feature);
+        layer.bindPopup(feature.properties.name);
+      }
+    }).addTo(map);
+  }
+
+  // ============================
+  // 集成OSM Buildings显示3D建筑物
+  // ============================
+  // 加载数据
+  if (display.osm_buildings) {
+    var osmb = new OSMBuildings(map)
+      .date(new Date(2014, 10, 8, 8, 0))
+      .load()
+      .click(function (e) {
+        console.log('feature clicked:', e);
+        osmb.getDetails(e.feature, function (json) {
+          console.log(json.features[0].properties.tags);
+          var popup = L.popup()
+            .setLatLng([29.58170544840436, 106.53061509132385])
+            .setContent('<h3 style="margin: 5px 0">' + json.features[0].properties.tags.name + '</h3>' + '<br/>' + json.features[0].properties.tags.description)
+            .openOn(map);
+        });
+      });
+
+    // 加载层切换器
+    L.control.layers({}, { Buildings: osmb }).addTo(map);
+  }
+
+
+  // ============================
+  // 绘制工具
+  // ============================
+
+  // 添加绘制层
+  var drawnItems = new L.FeatureGroup();
+  map.addLayer(drawnItems);
+  // 添加绘制控件
+  var drawControl = new L.Control.Draw({
+    draw: {
+      position: 'topleft',
+      polygon: {
+        title: '绘制一个多边形',
+        allowIntersection: false,
+        drawError: {
+          color: '#b00b00',
+          timeout: 1000
+        },
+        shapeOptions: {
+          color: '#bada55',
+          color: '#3879d9'
+        },
+        showArea: true
+      },
+      polyline: {
+        metric: false
+      },
+      circle: {
+        title: '绘制一个圆形',
+        shapeOptions: {
+          color: '#662d91'
+        }
+      }
+    },
+    edit: {
+      featureGroup: drawnItems
+    }
+  });
+  map.addControl(drawControl);
+  // 绘制事件处理
+  map.on('draw:created', function (e) {
+    var type = e.layerType;
+    var layer = e.layer;
+
+    if (type === 'marker') {
+      layer.bindPopup('A popup!');
+    }
+    drawnItems.addLayer(layer);
+  });
+
+  var pop;
+  map.on('contextmenu', function (e) {
+    console.log(e);
+    pop = new L.popup()
+      .setContent(e.latlng.lat + ', ' + e.latlng.lng)
+      .setLatLng(e.latlng)
+      .addTo(map);
+  });
+</script>
+</body>
+</html>
