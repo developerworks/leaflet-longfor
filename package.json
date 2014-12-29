@@ -1,0 +1,28 @@
+{
+  "name": "leaflet-baidu",
+  "version": "0.0.1",
+  "description": "Baidu plugin of Leaflet.js",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@96.126.116.246:/home/git/repo/leaflet-baidu.git"
+  },
+  "keywords": [
+    "leaflet",
+    "baidu"
+  ],
+  "author": "developerworks <http://developerworks.github.io> (http://developerworks.github.io/)",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-compass": "^2.0.3",
+    "gulp-jshint": "^1.9.0",
+    "gulp-jslint": "^0.2.1"
+  }
+}

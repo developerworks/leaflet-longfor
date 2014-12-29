@@ -1,0 +1,7 @@
+.vimrc
+.DS_Store
+.idea/
+bower_components/
+examples/
+node_modules/
+resources/
