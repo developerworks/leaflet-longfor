@@ -1,6 +1,5 @@
 ## Leaftlet OSM Buildings 龙湖北城天街示例
 
-
 OSM Buildings 是一个OpenStreetMaps建筑几何体的可视化库.
 
 ![龙湖北城天街OSM Buildings](http://developerworks.github.io/assets/leafletjs/412EEDB9-268F-4D6A-9243-845A632F9A80.png)
@@ -78,6 +77,20 @@ OSM Buildings 是一个OpenStreetMaps建筑几何体的可视化库.
     // 加载层切换器
     L.control.layers({}, { Buildings: osmb }).addTo(map);
     ```
+
+## 完整项目代码
+
+```
+git clone https://github.com/developerworks/leaflet-longfor.git
+cd leaflet-longfor
+bower install
+npm install
+# 启动Web服务器
+python -m SimpleHTTPServer 8888 # Python 2.7
+python -m http.server 8888      # Python 3
+# 浏览器地址栏
+http://localhost:8888/examples
+```
 
 ## 参考资料
 

@@ -14,7 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.3",
     "Leaflet.draw": "https://github.com/Leaflet/Leaflet.draw.git#~0.2.3",
     "Leaflet.markercluster": "https://github.com/Leaflet/Leaflet.markercluster.git#~0.4.0",
     "osmbuildings": "https://github.com/kekscom/osmbuildings.git",
